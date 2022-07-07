@@ -1,39 +1,43 @@
 import { useNavigate, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
 
 export default function Produtos () {
 	const navigate = useNavigate();
+	const [produtos, setProdutos] = useState([]);
+
+	useEffect(() => {
+		const url = 'http://localhost:5000/produtos';
+		axios.get(url).then(response => {
+			const {data} = response;
+			setProdutos(data);
+			console.log(data);
+		}).catch(error => console.log(error));
+	}, []);
 
 	return (
 		<>
 			<Cards>
-				<Card>
-					<Image src="https://i.dell.com/is/image/DellContent//content/dam/ss2/product-images/dell-client-products/notebooks/inspiron-notebooks/inspiron-15-3511/media-gallery/in3511nt_cnb_00000ff090_bk.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=402&qlt=100,0&resMode=sharp2&size=402,402"/>
-					<Container>
-						<h3>Notebook DELL Inspiron 15 3000</h3>
-						<p>R$ 2798,00</p>
-						<div><p>Adciona ao carrinho</p></div>
-					</Container>
-				</Card>
-				<Card>
-					<Image src="https://i.dell.com/is/image/DellContent//content/dam/ss2/product-images/dell-client-products/notebooks/inspiron-notebooks/inspiron-15-3511/media-gallery/in3511nt_cnb_00000ff090_bk.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=402&qlt=100,0&resMode=sharp2&size=402,402"/>
-					<Container>
-						<h3>Notebook DELL Inspiron 15 3000</h3>
-						<p>R$ 2798,00</p>
-						<div><p>Adciona ao carrinho</p></div>
-					</Container>
-				</Card>
-				<Card>
-					<Image src="https://i.dell.com/is/image/DellContent//content/dam/ss2/product-images/dell-client-products/notebooks/inspiron-notebooks/inspiron-15-3511/media-gallery/in3511nt_cnb_00000ff090_bk.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=402&qlt=100,0&resMode=sharp2&size=402,402"/>
-					<Container>
-						<h3>Notebook DELL Inspiron 15 3000</h3>
-						<p>R$ 2798,00</p>
-						<div><p>Adciona ao carrinho</p></div>
-					</Container>
-				</Card>
+				{
+					(produtos.length > 0) ? (
+						produtos.map(produto => {
+							return (
+								<Card>
+									<Image src={produto.imagem}/>
+									<Container>
+										<h3>{produto.titulo}</h3>
+										<p>R$ {produto.preco}</p>
+										<div><p>Adciona ao carrinho</p></div>
+									</Container>
+								</Card>
+							)
+						})
+					) : (
+						"Carregando Produtos..."
+					)
+				}
 			</Cards>
 		</>
 	);
@@ -52,6 +56,7 @@ const Card = styled.div`
 	width: 80%;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	padding: 5px;
 `;
 
 const Image = styled.img`
