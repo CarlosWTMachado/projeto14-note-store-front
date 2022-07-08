@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
+import Header from "./Header";
 
 export default function Produtos () {
 	const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function Produtos () {
 
 	return (
 		<>
+			<Header/>
 			<Cards>
 				{
 					(produtos.length > 0) ? (
@@ -47,6 +49,7 @@ const Cards = styled.div`
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	margin-top: 70px;
 `;
 
 const Card = styled.div`
@@ -71,7 +74,8 @@ const Container = styled.div`
 		font-weight: bold;
 	}
 	div p{
-		background-color: green;
+		background-color: #232f3e;
+		color: white;
 		align-items: center;
 		text-align: center;
 		padding-top: 10px;
