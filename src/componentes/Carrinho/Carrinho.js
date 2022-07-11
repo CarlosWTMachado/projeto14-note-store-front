@@ -4,7 +4,6 @@ import { AddOutline, RemoveOutline } from 'react-ionicons'
 import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
-import LoadingSpin from "react-loading-spin";
 import Header from "../Header";
 
 export default function Produtos () {
@@ -83,7 +82,7 @@ export default function Produtos () {
 							)
 						})
 					) : (
-						<LoadingSpin/>
+						<p>Carrinho Vazio</p>
 					)
 				}
 			</Cards>
