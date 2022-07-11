@@ -5,25 +5,48 @@ import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
-import Header from "../Produtos/Header";
+import Header from "../Header";
 
 export default function Produtos () {
 	const navigate = useNavigate();
 	const [carrinho, setCarrinho] = useState([]);
 
-	useEffect(() => {
-		const url = 'http://localhost:5000/carrinho';
+	useEffect(getCarrinho, []);
+
+	function getCarrinho(){
+		const url = 'https://projeto14-note-store.herokuapp.com/carrinho';
 		const carrinho = localStorage.getItem('CarrinhoToken');
 		axios.get(url, {
 			headers: {
-				carrinho: "4fc17656-757f-4d77-9769-83a312f03d7d"
+				carrinho: carrinho
 			}
 		  }).then(response => {
 			const {data} = response;
-			console.log(data)
 			setCarrinho(data);
 		}).catch(error => console.log(error));
-	}, []);
+	}
+
+	function Adiciona(element){
+		const carrinhoId = element.target.parentNode.parentNode.parentNode.id;
+		console.log(carrinhoId)
+		const url = 'https://projeto14-note-store.herokuapp.com/updatecarrinho';
+		axios.post(url, {carrinhoId: carrinhoId, adiciona: true}).then(response => {
+			const {data} = response;
+			console.log(data)
+			getCarrinho();
+		}).catch(error => console.log(error));
+	}
+
+	function Subtrai(element){
+		const carrinhoId = element.target.parentNode.parentNode.parentNode.id;
+		console.log(carrinhoId)
+		const url = 'https://projeto14-note-store.herokuapp.com/updatecarrinho';
+		axios.post(url, {carrinhoId: carrinhoId, adiciona: false}).then(response => {
+			const {data} = response;
+			console.log(data)
+			getCarrinho();
+		}).catch(error => console.log(error));
+	}
 
 	return (
 		<>
@@ -31,27 +54,29 @@ export default function Produtos () {
 			<Cards>
 				{
 					(carrinho.length > 0) ? (
-						carrinho.map(produto => {
+						carrinho.map(value => {
 							return (
-								<Card  id={produto._id}>
-									<Image src={"https://i.dell.com/is/image/DellContent//content/dam/ss2/product-images/dell-client-products/notebooks/inspiron-notebooks/inspiron-15-3511/media-gallery/in3511nt_cnb_00000ff090_bk.psd?fmt=png-alpha&pscan=auto&scl=1&hei=402&wid=402&qlt=100,0&resMode=sharp2&size=402,402"}/>
+								<Card id={value.carrinho._id}>
+									<Image src={value.produto.imagem}/>
 									<Container>
-										<h3>{"Notebook Gamer Predator Helios 300 PH315-54-7852"}</h3>
-										<p>R$ {"8999,00"}</p>
+										<h3>{value.produto.titulo}</h3>
+										<p>R$ {value.produto.preco}</p>
 									</Container>
 									<Quantity>
-										<AddOutline 
-											color='white' 
-											width='15px' 
-											height='15px'
-											style={{marginRight: "5px", marginLeft: "5px"}}
-										/>
-										<p>{produto.quantidade}</p>
 										<RemoveOutline 
 											color='white' 
 											width='15px' 
 											height='15px'
 											style={{marginRight: "5px", marginLeft: "5px"}}
+											onClick={Subtrai}
+										/>
+										<p>{value.carrinho.quantidade}</p>
+										<AddOutline 
+											color='white' 
+											width='15px' 
+											height='15px'
+											style={{marginRight: "5px", marginLeft: "5px"}}
+											onClick={Adiciona}
 										/>
 									</Quantity>
 								</Card>
@@ -62,6 +87,9 @@ export default function Produtos () {
 					)
 				}
 			</Cards>
+			<Button onClick={() => navigate('/checkout')}>
+				<p>Check Out</p>
+			</Button>
 		</>
 	);
 }
@@ -71,6 +99,7 @@ const Cards = styled.div`
 	align-items: center;
 	flex-direction: column;
 	margin-top: 70px;
+	margin-bottom: 40px;
 `;
 
 const Card = styled.div`
@@ -111,5 +140,20 @@ const Quantity = styled.div`
 		text-align: center;
 		padding-top: 10px;
 		padding-bottom: 10px;
+	}
+`;
+
+const Button = styled.div`
+	display: flex;
+	position: fixed;
+	align-items: center;
+	justify-content: center;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	height: 40px;
+	background-color: #232f3e;
+	p{
+		color: white;
 	}
 `;

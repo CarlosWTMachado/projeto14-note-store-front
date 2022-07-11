@@ -4,25 +4,40 @@ import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
 import LoadingSpin from "react-loading-spin";
-import Header from "./Header";
+import Header from "../Header";
 
 export default function Produtos () {
 	const navigate = useNavigate();
 	const [produtos, setProdutos] = useState([]);
 
 	useEffect(() => {
-		const url = 'http://localhost:5000/produtos';
+		const url = 'https://projeto14-note-store.herokuapp.com/produtos';
 		const carrinho = localStorage.getItem('CarrinhoToken');
 		axios.get(url, {
 			headers: {
 				carrinho: carrinho
 			}
-		  }).then(response => {
+		}).then(response => {
 			const {data} = response;
 			setProdutos(data.produtos);
 			localStorage.setItem('CarrinhoToken', data.token);
 		}).catch(error => console.log(error));
 	}, []);
+
+	function AdicionaCarrinho(element){
+		const produtoId = element.target.parentNode.parentNode.id;
+		const carrinho = localStorage.getItem('CarrinhoToken');
+		const url = 'https://projeto14-note-store.herokuapp.com/carrinho';
+		axios.post(url, {id:produtoId}, {
+			headers: {
+				carrinho: carrinho
+			}
+		}).then(response => {
+			const {data} = response;
+			element.target.disabled = true;
+			alert("produto adicionado no carrinho");
+		}).catch(error => console.log(error));
+	}
 
 	return (
 		<>
@@ -37,7 +52,7 @@ export default function Produtos () {
 									<Container>
 										<h3>{produto.titulo}</h3>
 										<p>R$ {produto.preco}</p>
-										<div><p>Adciona ao carrinho</p></div>
+										<button onClick={AdicionaCarrinho}>Adiciona ao carrinho</button>
 									</Container>
 								</Card>
 							)
@@ -79,13 +94,13 @@ const Container = styled.div`
 	h3{
 		font-weight: bold;
 	}
-	div p{
+	button{
 		background-color: #232f3e;
 		color: white;
 		align-items: center;
 		text-align: center;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		padding: 10px;
 		margin-top: 15px;
+		width: 270px;
 	}
 `;

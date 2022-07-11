@@ -8,7 +8,7 @@ export default function Produtos () {
 	
 	return (
 		<HeaderContainer>
-			<AppName>
+			<AppName onClick={() => navigate('/')}>
 				<LaptopOutline
 					color='white'
 					width='60px'
