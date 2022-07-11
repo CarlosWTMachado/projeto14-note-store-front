@@ -1,0 +1,9 @@
+body {
+	width: 375px;
+	height: fit-content;
+	overflow: scroll;
+	background-color: #D5DBDB;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans&family=Righteous&family=Saira+Stencil+One&display=swap');
