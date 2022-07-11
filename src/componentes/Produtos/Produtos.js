@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import React from 'react';
 import styled from "styled-components";
+import LoadingSpin from "react-loading-spin";
 import Header from "./Header";
 
 export default function Produtos () {
@@ -11,10 +12,15 @@ export default function Produtos () {
 
 	useEffect(() => {
 		const url = 'http://localhost:5000/produtos';
-		axios.get(url).then(response => {
+		const carrinho = localStorage.getItem('CarrinhoToken');
+		axios.get(url, {
+			headers: {
+				carrinho: carrinho
+			}
+		  }).then(response => {
 			const {data} = response;
-			setProdutos(data);
-			console.log(data);
+			setProdutos(data.produtos);
+			localStorage.setItem('CarrinhoToken', data.token);
 		}).catch(error => console.log(error));
 	}, []);
 
@@ -26,7 +32,7 @@ export default function Produtos () {
 					(produtos.length > 0) ? (
 						produtos.map(produto => {
 							return (
-								<Card>
+								<Card id={produto._id}>
 									<Image src={produto.imagem}/>
 									<Container>
 										<h3>{produto.titulo}</h3>
@@ -37,7 +43,7 @@ export default function Produtos () {
 							)
 						})
 					) : (
-						"Carregando Produtos..."
+						<LoadingSpin/>
 					)
 				}
 			</Cards>

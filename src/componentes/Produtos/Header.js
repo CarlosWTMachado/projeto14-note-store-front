@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from "react-router-dom";
-import { LaptopOutline, CartOutline, PersonOutline } from 'react-ionicons'
+import { LaptopOutline, CartOutline, PersonOutline } from 'react-ionicons';
 
 export default function Produtos () {
 	const navigate = useNavigate();
