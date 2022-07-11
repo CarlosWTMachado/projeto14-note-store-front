@@ -5,8 +5,8 @@ import Produtos from "./Produtos/Produtos";
 import Carrinho from "./Carrinho/Carrinho";
 import Checkout from "./CheckOut/Checkout";
 
-import Login from "./components/Login";
-import SignUp from "./components/Sign-Up";
+import Login from "./componentes/Login";
+import SignUp from "./componentes/Sign-Up";
 import GlobalStyle from "./assets/GlobalStyle/GlobalStyle";
 import UserContext from "./contexts/UserContext";
 
